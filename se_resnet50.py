@@ -388,13 +388,11 @@ def run_train_valid(foldn):
 
 
 def run_test(foldn,ttan):
-
     epoch = n_epochs-1
-    save_model_path = os.path.join(dir_csv, 'fold%depoch%d.pt') % (foldn,epoch)
+    submission_path = os.path.join(dir_csv, 'se_resnet50_submission_fold%d_epoch%dttan%d.csv') % (foldn,epoch,ttan)
 
-    if os.path.exists(save_model_path):
-        return os.path.join(dir_csv, 'se_resnet50_submission_fold%d_epoch%dttan%d.csv') % (foldn,epoch,ttan)
-
+    if os.path.exists(submission_path):
+        return submission_path
 
     test_path = os.path.join(dir_csv, 'test.csv') 
 
@@ -426,13 +424,8 @@ def run_test(foldn,ttan):
     data_loader_test = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, drop_last=False)
 
 
+    save_model_path = os.path.join(dir_csv, 'fold%depoch%d.pt') % (foldn,epoch)
 
-    #testtt
-    '''
-    epoch = 0
-    save_model_path = '/home/zylin/dataset/ep0.pt'
-    save_model_path = '/home/user1012/.lzy/ep0.pt'
-    '''
 
     state = torch.load(save_model_path)
     model = model_ll()
