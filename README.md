@@ -1,17 +1,28 @@
 # RSNA Intracranial Hemorrhage Detection
 
+## Overview
+
+Identify acute intracranial hemorrhage and its subtypes
+
+`https://www.kaggle.com/c/rsna-intracranial-hemorrhage-detection`
+
 ## Installing useful libraries
 
 ```
 git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
 ```
 
+```
+pip install efficientnet_pytorch
+pip install pretrainedmodels
+```
+
 ## Command
 
-**se_resnet50.py:**
+**main.py:**
 
 ```
-python se_resnet50.py
+python main.py
 
 
  --train True (default:False)
@@ -41,16 +52,31 @@ python windowing.py
 
 1. install libraries in `# Libraries`
 
-2. modify `# Input`
+2. modify `# Parameters`
 
-3. modify `# Parameters`
+3. modify `# Input`
+
+4. train : run command `python main.py --train True --foldn 0`
+
+5. test : run command `python main.py --test True --foldn 0 --tta 5`
+
+6. make folds : run command `python main.py --make_fold True`
+
+## Output
+
+1. output directory : `./output/model_name/`
+
+2. k-fold cross validation : `./fold/`
+
+3. submission csv file : `./submission/`
 
 ## Timeline
+
 October 28, 2019 - Entry deadline. You must accept the competition rules before this date in order to compete.
 
 October 28, 2019 - Team Merger deadline. This is the last day participants may join or merge teams.
 
-November 4, 2019 - Stage 1 ends & Model upload deadline*.
+November 4, 2019 - Stage 1 ends & Model upload deadline.
 
 November 5, 2019 - Stage 2 begins. New test set uploaded.
 
