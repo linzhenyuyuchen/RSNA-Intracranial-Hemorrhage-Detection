@@ -34,7 +34,7 @@ from efficientnet_pytorch import EfficientNet
 
 # Parameters
 
-model_name = 'se_resnet50' #se_resnext101_32x4d se_resnet50 efficientnetb2
+model_name = 'se_resnet50' #se_resnext101_32x4d se_resnet50 efficientnetb2 densenet121 efficientnetb0
 loss_with_weight = True
 n_classes = 6
 n_epochs = 3
@@ -48,8 +48,9 @@ n_fold = 5
 dir_csv = '/home/zylin/dataset'
 dir_output = '/home/zylin/dataset/output/%s' %model_name
 dir_train_img = os.path.join(dir_csv,'stage_1_train_images') 
-dir_test_img = os.path.join(dir_csv,'stage_1_test_images') 
-folds_pkl = os.path.join(dir_output, 'folds.pkl')
+dir_test_img = os.path.join(dir_csv,'stage_1_test_images')
+dir_fold = '/home/zylin/dataset/output/fold/'
+folds_pkl = os.path.join(dir_fold, 'folds.pkl')
 
 
 # Functions
@@ -211,10 +212,16 @@ def model_ll():
     elif model_name == 'se_resnet50':
         model = torch.hub.load('moskomule/senet.pytorch','se_resnet50',pretrained=True)
         model.fc = torch.nn.Linear(2048, n_classes)
-
+    elif model_name == 'efficientnetb0':
+        model = EfficientNet.from_pretrained('efficientnet-b0')
+        model._fc = torch.nn.Linear(model._fc.in_features,n_classes)
     elif model_name == 'efficientnetb2':
         model = EfficientNet.from_pretrained('efficientnet-b2')
         model._fc = torch.nn.Linear(model._fc.in_features,n_classes)
+    elif model_name == 'densenet121':
+    	model = torch.hub.load('pytorch/vision','densenet121',pretrained=True)
+    	model.classifier = torch.nn.Linear(model.classifier.in_features,n_classes)
+    	
     return model
 
 def run_nn(mode,model,loader,criterion=None,optimizer=None):
@@ -266,8 +273,8 @@ def run_nn(mode,model,loader,criterion=None,optimizer=None):
 
 def run_train_valid(foldn):
 
-    train_path = os.path.join(dir_output, 'train_fold%d.csv') % (foldn)
-    valid_path = os.path.join(dir_output, 'valid_fold%d.csv') % (foldn)
+    train_path = os.path.join(dir_fold, 'train_fold%d.csv') % (foldn)
+    valid_path = os.path.join(dir_fold, 'valid_fold%d.csv') % (foldn)
 
     if not os.path.exists(train_path) or not os.path.exists(valid_path) :
         # load folds
@@ -400,7 +407,7 @@ def run_test(foldn,ttan):
     if os.path.exists(submission_path):
         return submission_path
 
-    test_path = os.path.join(dir_output, 'test.csv') 
+    test_path = os.path.join(dir_fold, 'test.csv') 
 
 
     if not os.path.exists(test_path):
