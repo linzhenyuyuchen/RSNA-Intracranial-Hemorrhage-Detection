@@ -50,6 +50,14 @@ python windowing.py
 
 ```
 
+**analysis**
+
+- confusion matrix
+
+- Receiver Operating Characteristic
+
+- Stacking
+
 ## Run
 
 1. install libraries in `# Libraries`
@@ -63,6 +71,7 @@ python windowing.py
 5. test : run command `python main.py --test True --foldn 0 --tta 5`
 
 6. make folds : run command `python main.py --make_fold True`
+
 
 ## Output
 
